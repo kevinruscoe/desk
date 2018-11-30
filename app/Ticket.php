@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use App\TicketStatus;
 
 class Ticket extends Model
@@ -24,7 +25,9 @@ class Ticket extends Model
      */
     public function agent()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withDefault([
+            'name' => 'unassigned'
+        ]);
     }
 
     /**
@@ -55,5 +58,27 @@ class Ticket extends Model
     public function setStatus(TicketStatus $ticketStatus)
     {
         return $this->status()->associate($ticketStatus)->save();
+    }
+
+    /**
+     * Limit the scope to the logged in user.
+     *
+     * @param Builder $builder
+     * @return Builder
+     */
+    public function scopeMine(Builder $builder)
+    {
+        return $builder->where('agent_id', auth()->id() ?? '*');
+    }
+
+    /**
+     * Limit the scope to unassigned.
+     *
+     * @param Builder $builder
+     * @return Builder
+     */
+    public function scopeUnassigned(Builder $builder)
+    {
+        return $builder->doesntHave('agent');
     }
 }

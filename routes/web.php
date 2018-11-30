@@ -17,4 +17,13 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::middleware(['auth'])
+    ->name('helpdesk.')
+    ->prefix('helpdesk')
+    ->namespace('Helpdesk')
+    ->group(function () {
+        Route::get('dashboard', 'DashboardController');
+        Route::resource('ticket', 'TicketController');
+    });
+
 Route::get('/home', 'HomeController@index')->name('home');

@@ -12,3 +12,23 @@
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
+
+td {
+  &.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &.truncate-100 {
+      max-width: 100px;
+    }
+
+    &.truncate-150 {
+      max-width: 150px;
+    }
+
+    &.truncate-250 {
+      max-width: 250px;
+    }
+  }
+}
